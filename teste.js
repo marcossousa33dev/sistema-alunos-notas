@@ -27,8 +27,6 @@ const conexao = mysql.createConnection({
   host: process.env.DB_HOST,
 
   // Porta usada para acessar o banco MySQL.
-  // Como o valor vem do .env em formato de texto,
-  // usamos Number() para converter para número.
   port: Number(process.env.DB_PORT),
 
   // Usuário do banco de dados.
@@ -41,12 +39,7 @@ const conexao = mysql.createConnection({
   database: process.env.DB_NAME,
 
   // Configuração SSL para conexão segura com banco em nuvem.
-  // O Aiven utiliza conexão segura, por isso usamos ssl.
   ssl: {
-
-    // Define que o Node.js não irá bloquear a conexão
-    // caso o certificado não seja validado localmente.
-    // Em projetos didáticos, isso facilita a conexão com o Aiven.
     rejectUnauthorized: false
   }
 });
@@ -66,7 +59,7 @@ app.get('/teste-banco', (req, res) => {
 
   // Executa uma consulta SQL simples no banco.
   // SELECT NOW() retorna a data e hora atual do servidor MySQL.
-  conexao.query('SELECT NOW() AS data_hora_atual', (erro, resultados) => {
+  conexao.query('SELECT NOW() AS data_hora_atual', (erro, resultados, campos) => {
 
     // Verifica se ocorreu algum erro durante a consulta ao banco.
     if (erro) {
@@ -75,24 +68,62 @@ app.get('/teste-banco', (req, res) => {
       // indicando erro interno no servidor.
       return res.status(500).json({
 
+        // Indica que a requisição falhou.
+        status: 'erro',
+
         // Mensagem amigável para informar o problema.
         mensagem: 'Erro ao conectar ao banco MySQL do Aiven',
 
         // Mostra a mensagem técnica do erro.
-        // Isso ajuda durante os testes e a depuração.
-        erro: erro.message
+        erro: erro.message,
+
+        // Mostra o código do erro, quando existir.
+        codigo: erro.code,
+
+        // Mostra o número do erro, quando existir.
+        errno: erro.errno,
+
+        // Mostra o estado SQL, quando existir.
+        sqlState: erro.sqlState
       });
     }
 
     // Se não houve erro, retorna uma resposta em formato JSON.
     res.json({
 
+      // Indica que a requisição deu certo.
+      status: 'sucesso',
+
       // Mensagem de sucesso.
       mensagem: 'Conexão com o banco MySQL do Aiven realizada com sucesso!',
 
       // Retorna a data e hora vinda do banco de dados.
       // resultados[0] acessa a primeira linha retornada pela consulta.
-      data_hora_atual: resultados[0].data_hora_atual
+      data_hora_atual: resultados[0].data_hora_atual,
+
+      // Retorna a quantidade de registros encontrados.
+      total_registros: resultados.length,
+
+      // Retorna todos os resultados vindos do banco.
+      resultados: resultados,
+
+      // Retorna informações sobre os campos da consulta.
+      campos: campos.map(campo => ({
+        nome: campo.name,
+        tabela: campo.table,
+        tipo: campo.type,
+        tamanho: campo.length
+      })),
+
+      // Retorna algumas informações da conexão.
+      // A senha não deve ser retornada por segurança.
+      conexao: {
+        host: process.env.DB_HOST,
+        porta: Number(process.env.DB_PORT),
+        usuario: process.env.DB_USER,
+        banco: process.env.DB_NAME,
+        ssl: true
+      }
     });
   });
 });
