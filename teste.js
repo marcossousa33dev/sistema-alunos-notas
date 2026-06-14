@@ -47,7 +47,7 @@ const conexao = mysql.createConnection({
 // Cria uma rota GET para a página inicial da API.
 // Quando alguém acessar a URL principal do Render,
 // essa mensagem será exibida.
-app.get('/', (req, res) => {
+app.get('https://sistema-alunos-notas.onrender.com/', (req, res) => {
 
   // Envia uma resposta em texto para o navegador ou cliente HTTP.
   res.send('API do sistema de alunos e notas rodando no Render!');
@@ -55,7 +55,7 @@ app.get('/', (req, res) => {
 
 // Cria uma rota GET chamada /teste-banco.
 // Essa rota será usada para testar se a API consegue acessar o banco MySQL.
-app.get('/teste-banco', (req, res) => {
+app.get('https://sistema-alunos-notas.onrender.com/teste-banco', (req, res) => {
 
   // Executa uma consulta SQL simples no banco.
   // SELECT NOW() retorna a data e hora atual do servidor MySQL.
