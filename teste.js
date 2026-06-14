@@ -19,6 +19,10 @@ const app = express();
 // Isso é importante quando o frontend envia informações para o backend.
 app.use(express.json());
 
+//Liberando o acesso com CORS
+const cors = require('cors');
+app.use(cors());
+
 // Cria a conexão com o banco de dados MySQL.
 // Os dados de conexão estão vindo das variáveis de ambiente.
 const conexao = mysql.createConnection({
