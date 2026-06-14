@@ -6,223 +6,80 @@
 
   <title>Sistema de Alunos e Notas</title>
 
-  <style>
-    * {
-      box-sizing: border-box;
-      font-family: Arial, Helvetica, sans-serif;
-    }
-
-    body {
-      margin: 0;
-      background: #f4f6f8;
-      color: #222;
-    }
-
-    header {
-      background: #0d47a1;
-      color: white;
-      padding: 24px;
-      text-align: center;
-    }
-
-    header h1 {
-      margin: 0;
-      font-size: 28px;
-    }
-
-    header p {
-      margin-top: 8px;
-      font-size: 16px;
-    }
-
-    main {
-      max-width: 1000px;
-      margin: 30px auto;
-      padding: 20px;
-    }
-
-    .cards {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 20px;
-      margin-bottom: 30px;
-    }
-
-    .card {
-      background: white;
-      border-radius: 10px;
-      padding: 20px;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
-    }
-
-    .card h2 {
-      margin-top: 0;
-      color: #0d47a1;
-      font-size: 22px;
-    }
-
-    .status {
-      padding: 10px;
-      border-radius: 6px;
-      font-weight: bold;
-      margin-top: 10px;
-    }
-
-    .sucesso {
-      background: #e8f5e9;
-      color: #2e7d32;
-      border: 1px solid #81c784;
-    }
-
-    .erro {
-      background: #ffebee;
-      color: #c62828;
-      border: 1px solid #ef9a9a;
-    }
-
-    .info {
-      background: #e3f2fd;
-      color: #1565c0;
-      border: 1px solid #90caf9;
-    }
-
-    button {
-      background: #0d47a1;
-      color: white;
-      border: none;
-      padding: 12px 18px;
-      border-radius: 6px;
-      cursor: pointer;
-      font-size: 15px;
-      margin-top: 10px;
-    }
-
-    button:hover {
-      background: #08306b;
-    }
-
-    pre {
-      background: #263238;
-      color: #e0f7fa;
-      padding: 15px;
-      border-radius: 8px;
-      overflow-x: auto;
-      font-size: 14px;
-      white-space: pre-wrap;
-      word-wrap: break-word;
-    }
-
-    .tabela-container {
-      overflow-x: auto;
-      margin-top: 15px;
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 10px;
-      background: white;
-    }
-
-    th {
-      background: #0d47a1;
-      color: white;
-      padding: 10px;
-      text-align: left;
-    }
-
-    td {
-      border: 1px solid #ddd;
-      padding: 10px;
-    }
-
-    tr:nth-child(even) {
-      background: #f2f2f2;
-    }
-
-    footer {
-      text-align: center;
-      padding: 20px;
-      color: #666;
-      font-size: 14px;
-    }
-  </style>
+  <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
-  <header>
+  <header class="cabecalho">
     <h1>Sistema de Alunos e Notas</h1>
     <p>Frontend consumindo API Node.js + Express + MySQL Aiven</p>
   </header>
 
-  <main>
+  <main class="conteudo-principal">
 
-    <div class="cards">
+    <section class="cards" aria-label="Área de testes da API">
 
-      <div class="card">
+      <article class="card">
         <h2>Teste da API</h2>
+
         <p>Este botão consome a rota principal:</p>
         <strong>GET /</strong>
 
         <br>
 
-        <button onclick="testarApi()">Testar API</button>
+        <button type="button" onclick="testarApi()">Testar API</button>
 
-        <div id="resultado-api" class="status info">
+        <div id="resultado-api" class="status info" aria-live="polite">
           Aguardando teste da API...
         </div>
-      </div>
+      </article>
 
-      <div class="card">
+      <article class="card">
         <h2>Teste do Banco</h2>
+
         <p>Este botão consome a rota:</p>
         <strong>GET /teste-banco</strong>
 
         <br>
 
-        <button onclick="testarBanco()">Testar Banco Aiven</button>
+        <button type="button" onclick="testarBanco()">Testar Banco Aiven</button>
 
-        <div id="resultado-banco" class="status info">
+        <div id="resultado-banco" class="status info" aria-live="polite">
           Aguardando teste do banco...
         </div>
-      </div>
+      </article>
 
-    </div>
+    </section>
 
-    <div class="card">
-      <h2>Dados retornados do banco</h2>
+    <section class="card" aria-labelledby="titulo-dados-banco">
+      <h2 id="titulo-dados-banco">Dados retornados do banco</h2>
 
-      <div id="dados-banco">
+      <div id="dados-banco" aria-live="polite">
         Nenhum dado carregado ainda.
       </div>
-    </div>
+    </section>
 
-    <div class="card">
-      <h2>Retorno completo em JSON</h2>
+    <section class="card" aria-labelledby="titulo-json">
+      <h2 id="titulo-json">Retorno completo em JSON</h2>
 
-      <pre id="json-completo">
-Nenhuma requisição realizada ainda.
-      </pre>
-    </div>
+      <pre id="json-completo" aria-live="polite">Nenhuma requisição realizada ainda.</pre>
+    </section>
 
   </main>
 
-  <footer>
-    Sistema desenvolvido para aula de deploy com Render, Aiven e Netlify.
+  <footer class="rodape">
+    <p>Sistema desenvolvido para aula de deploy com Render, Aiven e Netlify.</p>
   </footer>
 
   <script>
     /*
       URL base da sua API.
 
-      Se estiver rodando localmente, use:
-      http://localhost:3000
-
       Se estiver usando o Render, troque pela URL do seu backend.
       Exemplo:
       https://sistema-alunos-notas.onrender.com
     */
-    const API_URL = 'http://localhost:3000';
+    const API_URL = 'https://sistema-alunos-notas.onrender.com';
 
     async function testarApi() {
       const resultadoApi = document.getElementById('resultado-api');
@@ -278,30 +135,34 @@ Nenhuma requisição realizada ainda.
 
             <h3>Informações da conexão</h3>
             <table>
-              <tr>
-                <th>Item</th>
-                <th>Valor</th>
-              </tr>
-              <tr>
-                <td>Host</td>
-                <td>${dados.conexao.host}</td>
-              </tr>
-              <tr>
-                <td>Porta</td>
-                <td>${dados.conexao.porta}</td>
-              </tr>
-              <tr>
-                <td>Usuário</td>
-                <td>${dados.conexao.usuario}</td>
-              </tr>
-              <tr>
-                <td>Banco</td>
-                <td>${dados.conexao.banco}</td>
-              </tr>
-              <tr>
-                <td>SSL</td>
-                <td>${dados.conexao.ssl ? 'Ativado' : 'Desativado'}</td>
-              </tr>
+              <thead>
+                <tr>
+                  <th>Item</th>
+                  <th>Valor</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Host</td>
+                  <td>${dados.conexao.host}</td>
+                </tr>
+                <tr>
+                  <td>Porta</td>
+                  <td>${dados.conexao.porta}</td>
+                </tr>
+                <tr>
+                  <td>Usuário</td>
+                  <td>${dados.conexao.usuario}</td>
+                </tr>
+                <tr>
+                  <td>Banco</td>
+                  <td>${dados.conexao.banco}</td>
+                </tr>
+                <tr>
+                  <td>SSL</td>
+                  <td>${dados.conexao.ssl ? 'Ativado' : 'Desativado'}</td>
+                </tr>
+              </tbody>
             </table>
 
             <h3>Campos retornados pela consulta</h3>
@@ -344,12 +205,15 @@ Nenhuma requisição realizada ainda.
       let tabela = `
         <div class="tabela-container">
           <table>
-            <tr>
-              <th>Nome</th>
-              <th>Tabela</th>
-              <th>Tipo</th>
-              <th>Tamanho</th>
-            </tr>
+            <thead>
+              <tr>
+                <th>Nome</th>
+                <th>Tabela</th>
+                <th>Tipo</th>
+                <th>Tamanho</th>
+              </tr>
+            </thead>
+            <tbody>
       `;
 
       campos.forEach(campo => {
@@ -364,6 +228,7 @@ Nenhuma requisição realizada ainda.
       });
 
       tabela += `
+            </tbody>
           </table>
         </div>
       `;
@@ -381,14 +246,19 @@ Nenhuma requisição realizada ainda.
       let tabela = `
         <div class="tabela-container">
           <table>
-            <tr>
+            <thead>
+              <tr>
       `;
 
       colunas.forEach(coluna => {
         tabela += `<th>${coluna}</th>`;
       });
 
-      tabela += `</tr>`;
+      tabela += `
+              </tr>
+            </thead>
+            <tbody>
+      `;
 
       resultados.forEach(linha => {
         tabela += `<tr>`;
@@ -401,6 +271,7 @@ Nenhuma requisição realizada ainda.
       });
 
       tabela += `
+            </tbody>
           </table>
         </div>
       `;
